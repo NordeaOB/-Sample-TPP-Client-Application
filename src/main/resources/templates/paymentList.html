@@ -1,0 +1,102 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: head">
+    <style>
+        input[type=text], .txtarea {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="header :: header"></div>
+
+<div class="parallax-container">
+    <div class="row">
+        <div class="col m8 s8 offset-m2 offset-s2 center">
+            <div class="transient-card">
+                <div class="row button-row">
+                    <form action="/payments/showCreatePayment" method="get">
+                        <input class="btn waves-effect waves-light z-depth-3" type="submit" value="Create payment" name="Submit" id="frm1_submit"/>
+                    </form>
+                </div>
+                <h4>Your payments</h4>
+                <table class="striped" id="tableToBeUpdatedWithAjax">
+                    <thead>
+                    <tr>
+                        <th>When</th>
+                        <th>From</th>
+                        <th>To</th>
+                        <th>Amount</th>
+                        <th>Payment status</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="payment : ${paymentList}">
+
+                        <script th:inline="javascript">
+                            /*<![CDATA[*/
+                            var statusResponse = '--';
+                            var signingStatus = '--';
+                            /*]]>*/
+                        </script>
+
+                        <div th:each="link : ${payment.links}">
+                            <script th:if="${link.rel == 'status'}" th:inline="javascript">
+                                /*<![CDATA[*/
+                                var statusUrl = /*[[${payment.links[1].href}]]*/ 'value';
+                                statusResponse = getJson(statusUrl);
+                                var paymentStatus = statusResponse.response.payment_status_information.transaction_individual_status_code;
+                                signingStatus = "NOT INITIATED";
+                                if (statusResponse.response.signing_status_information) {
+                                    signingStatus = statusResponse.response.signing_status_information.signing_status;
+                                }
+                                /*]]>*/
+                            </script>
+                        </div>
+                        <td th:text="${payment.timestamp}"/>
+                        <td th:text="${payment.debtor.account.value}"/>
+                        <td th:text="${payment.creditor.account.value}"/>
+                        <td th:text="${payment.amount}"/>
+                        <td th:text="${payment.paymentStatus}"/>
+                        <td>
+                            <span th:each="link : ${payment.links}" th:inline="text">
+                                <a th:if="${link.rel == 'signing'}"
+                                   th:link="${link.href}" th:text="${link.rel}" role="button" id="sign-payment" class="btn btn-primary btn-small tooltipped"
+                                   data-tooltip="Start a payment signing process"
+                                   th:onclick="window.open(this.getAttribute('link'),'signing', 'width=500, height=577, scrollbars=yes ,menubar=no, resizable=yes, toolbar=no'); return false;"/>
+                                <a th:if="${link.rel != 'signing'}" th:href="${link.href}" th:text="${link.rel}" role="button" class="btn btn-small"/>
+                            </span>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="header :: footer"></div>
+</body>
+</html>
+
+
+<script>
+
+    function fetchdata() {
+        $.ajax({
+            url: '/payments/showPaymentList',
+            type: 'get',
+            success: function (response) {
+                $('#tableToBeUpdatedWithAjax').replaceWith($('#tableToBeUpdatedWithAjax', response));
+
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        setInterval(fetchdata, 5000);
+    });
+</script>
+

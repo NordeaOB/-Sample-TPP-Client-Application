@@ -1,0 +1,119 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: head"/>
+<body>
+
+<div th:replace="header :: header"></div>
+
+<div class="parallax-container">
+    <div class="row">
+        <div class="col m8 s8 offset-m2 offset-s2 center">
+            <div class="transient-card">
+                <div class="row fancy-form">
+                    <form th:action="@{/payments/create}" th:object="${payment}" method="post">
+                        <h4>Create <span th:text="${@userSession.getCountry()}"/> payment</h4>
+
+                        <div class="row">
+                            <div class="input-field col s12 m4">
+                                <select name="from" id="from" th:field="*{debtor.account.value}" autofocus>
+                                    <option th:each="account : ${apiResponseAccounts}"
+                                            th:value="${account.accountNumbers[0].value}"
+                                            th:text="${account.accountNumbers[0].value}">
+                                    </option>
+                                </select>
+                                <label for="from">From</label>
+                            </div>
+                            <div class="input-field col s12 m4">
+                                <label for="to">To</label>
+                                <input type="text" name="to" id="to" th:field="*{creditor.account.value}"/>
+                            </div>
+                            <div class="input-field col s12 m4">
+                                <select name="to_account_type" id="to_account_type" th:field="*{creditor.account.type}" onchange="updateFieldsSE()">
+                                    <option th:text="IBAN" th:value="IBAN"/>
+                                    <option th:if="${@userSession.getCountry() == 'SE'}" selected th:text="BBAN_SE" th:value="BBAN_SE"/>
+                                    <option th:if="${@userSession.getCountry() == 'SE'}" th:text="BGNR" th:value="BGNR"/>
+                                    <option th:if="${@userSession.getCountry() == 'SE'}" th:text="PGNR" th:value="PGNR"/>
+                                    <option th:if="${@userSession.getCountry() == 'DK'}" selected th:text="BBAN_DK" th:value="BBAN_DK"/>
+                                    <option th:if="${@userSession.getCountry() == 'NO'}" selected th:text="BBAN_NO" th:value="BBAN_NO"/>
+                                </select>
+                                <label for="to_account_type">To account type</label>
+                            </div>
+                            <input th:if="${@userSession.getCountry() == 'FI'}" type="hidden" th:value="EUR" th:field="*{creditor.account.currency}">
+                            <input th:if="${@userSession.getCountry() == 'DK'}" type="hidden" th:value="DKK" th:field="*{creditor.account.currency}">
+                            <input th:if="${@userSession.getCountry() == 'SE'}" type="hidden" th:value="SEK" th:field="*{creditor.account.currency}">
+                            <input th:if="${@userSession.getCountry() == 'NO'}" type="hidden" th:value="NOK" th:field="*{creditor.account.currency}">
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s12 m4">
+                                <label for="amount">Amount</label>
+                                <input type="number" name="amount" id="amount" th:field="*{amount}" step="0.1"/>
+                            </div>
+                            <div class="input-field col s12 m4">
+                                <select name="currency" id="currency" th:field="*{currency}">
+                                    <option th:each="currency : ${currencies}"
+                                            th:value="${currency.value}"
+                                            th:text="${currency.value}">
+                                </select>
+                                <label for="currency">Currency</label>
+                            </div>
+                            <div class="input-field col s12 m4">
+                                <label for="name">Name of the beneficiary</label>
+                                <input type="text" name="name" id="name" th:field="*{creditor.name}"/>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s12 m4">
+                                <label for="ownmessage">Message to your statement</label>
+                                <input type="text" name="message" id="ownmessage" th:field="*{debtor.message}"/>
+                            </div>
+                            <div class="input-field col s12 m4" oninput="updateFieldsSE()">
+                                <label for="message" id="labelForMessage">Message to the beneficiary</label>
+                                <input oninput="updateFieldsNO()" type="text" name="message" id="message" th:field="*{creditor.message}"/>
+                            </div>
+                            <div th:if="${@userSession.getCountry() == 'NO'}">
+                                <div class="input-field col s12 m4">
+                                    <label for="refNO" id="labelRefNO">Reference</label>
+                                    <input oninput="updateFieldsNO()" type="text" name="refNO" id="refNO" th:field="*{creditor.reference.value}"/>
+                                </div>
+                                <div class="input-field col s12 m4">
+                                    <input type="hidden" id="referenceTypeNO" th:field="*{creditor.reference.type}">
+                                </div>
+                            </div>
+                            <div th:if="${@userSession.getCountry() == 'SE'}" >
+                                <div class="input-field col s12 m4">
+                                    <label hidden for="refSE" id="labelRefSE">Reference</label>
+                                    <input hidden oninput="updateFieldsSE()" type="text" name="refSE" id="refSE" th:field="*{creditor.reference.value}"/>
+                                </div>
+                                <div class="input-field col s12 m4">
+                                    <input type="hidden" id="referenceTypeSE" th:field="*{creditor.reference.type}">
+                                </div>
+                            </div>
+                            <div class="it-field col s12 m4">
+                                <div th:if="${@userSession.getCountry() == 'DK'}">
+                                    <select name="urgency" id="urgency" th:field="*{urgency}">
+                                        <option th:each="urgency : ${urgencies}"
+                                                th:value="${urgency.value}"
+                                                th:text="${urgency.value}">
+                                    </select>
+                                    <label for="urgency">Urgency</label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row button-row" onclick="referenceOCRSE()">
+                            <button class="btn waves-effect waves-light" type="button" onclick="history.back()">Back</button>
+                            <button onclick="referenceOCRNO()" type="submit" class="btn waves-effect waves-light z-depth-3">Create<i class="material-icons left">add</i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="header :: footer"></div>
+</body>
+</html>
+

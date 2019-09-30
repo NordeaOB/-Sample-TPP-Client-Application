@@ -1,0 +1,90 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: head"/>
+<body>
+
+<div th:replace="header :: header"></div>
+
+<div class="parallax-container">
+    <div class="row">
+        <div class="col m8 s8 offset-m2 offset-s2 center">
+            <div class="transient-card">
+                <div class="row fancy-form">
+                    <form th:action="@{/dynamic/sbx/accounts/create}" th:object="${account}" method="post">
+                        <h4>Create <span th:text="${@userSession.getCountry()}"/> account</h4>
+
+                        <div class="row">
+                            <div class="input-field col s12 m4">
+                                <label for="name">Name</label>
+                                <input type="text" name="name" id="name" th:field="*{accountName}"/>
+                            </div>
+                            <div class="input-field col s12 m4">
+                                <label for="product">Product</label>
+                                <input type="text" name="product" id="product" th:field="*{product}" />
+                            </div>
+                            <div class="input-field col s12 m4">
+                                <label for="abalance">Available balance</label>
+                                <input type="text" name="abalance" id="abalance" th:field="*{availableBalance}" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m4">
+                                <select name="accountType" id="accountType" th:field="*{accountType}">
+                                    <option th:each="accounttype : ${accountTypes}"
+                                            th:value="${accounttype.name()}"
+                                            th:text="${accounttype.value}">
+                                </select>
+                                <label for="accountType">Account type</label>
+                            </div>
+                            <div class="input-field col s12 m4">
+                                <select name="currency" id="currency" th:field="*{currency}">
+                                    <option th:each="currency : ${currencies}"
+                                            th:value="${currency.value}"
+                                            th:text="${currency.value}">
+                                </select>
+                                <label for="currency">Currency</label>
+                            </div>
+                            <div class="input-field col s12 m4">
+                                <label for="bbalance">Booked balance</label>
+                                <input type="text" name="bbalance" id="bbalance" th:field="*{bookedBalance}" />
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m4">
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th> Type</th>
+                                        <th> Number</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="account, itemStat : *{accountNumbers}">
+                                        <td><input th:field="*{accountNumbers[__${itemStat.index}__].type}" /></td>
+                                        <td><input th:field="*{accountNumbers[__${itemStat.index}__].value}" /></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="input-field col s12 m4">
+                            </div>
+                            <div class="input-field col s12 m4">
+                            </div>
+                        </div>
+                        <input type="hidden" th:value="${@userSession.getCountry()}" th:field="*{country}">
+                        <input type="hidden" th:value="${account.status}" th:field="*{status}">
+                        <div class="row button-row" onclick="referenceOCRSE()">
+                            <button class="btn waves-effect waves-light" type="button" onclick="history.back()">Back</button>
+                            <button type="submit" class="btn waves-effect waves-light z-depth-3">Create<i class="material-icons left">add</i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="header :: footer"></div>
+</body>
+</html>
+

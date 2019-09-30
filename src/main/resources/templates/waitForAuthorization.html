@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="header :: head"></head>
+<script th:inline="javascript">
+    function startCheckingAuthorizationStatus() {
+        var orderRef = [[${orderRef}]];
+        var tppToken = [[${tppToken}]];
+
+        checkAuthorizationStatus(orderRef, tppToken);
+    }
+
+    var checkAuthorizationCounter = 0;
+
+    function checkAuthorizationStatus(orderRef, tppToken) {
+        checkAuthorizationCounter++;
+        if (checkAuthorizationCounter > 50) {
+            alert("Authorization expired");
+            return;
+        }
+
+        setTimeout(function () {
+            $.ajax({
+                type: "GET",
+                contentType: "application/json",
+                url: "/authorize/decoupled/token?orderRef=" + orderRef + "&tppToken=" + tppToken,
+                cache: false,
+                timeout: 6000,
+                success: function () {
+                    // go to accounts
+                    window.location.href = "/accounts";
+                },
+                error: function () {
+                    checkAuthorizationStatus(orderRef, tppToken);
+                }
+            });
+        }, 2000); // each 2 s
+    }
+</script>
+<body onload="startCheckingAuthorizationStatus()">
+
+<div th:replace="header :: header"></div>
+
+<div class="col m8 s8 offset-m2 offset-s2 center align-wrapper">
+  <h4>Waiting for Authorization to be complete... Please confirm Authorization on Mobile device</h4>
+  <div class="preloader-wrapper big active">
+    <div class="spinner-layer spinner-blue-only">
+      <div class="circle-clipper left">
+        <div class="circle"></div>
+      </div>
+      <div class="gap-patch">
+        <div class="circle"></div>
+      </div>
+      <div class="circle-clipper right">
+        <div class="circle"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div th:replace="header :: footer"></div>
+
+</body>
+</html>

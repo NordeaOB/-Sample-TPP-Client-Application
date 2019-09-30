@@ -1,0 +1,118 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: head"></head>
+<body>
+
+<div th:replace="header :: header"></div>
+
+<div class="parallax-container">
+    <div class="row">
+        <div class="col m8 s8 offset-m2 offset-s2 center">
+            <div class="transient-card">
+                <h4>Transactions</h4>
+                    <div class="text-field left-align">
+                        <h6>Date range:</h6>
+                    </div>
+                <div class="row">
+                    <form id="filterTransactionsForm">
+                        <div class="input-field col s12 m6">
+                            <input
+                                    id="fromDate"
+                                    name="fromDate"
+                                    type="text"
+                                    placeholder="yyyy-mm-dd"/>
+                            <label for="fromDate">Date from</label>
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <input
+                                    id="toDate"
+                                    name="toDate"
+                                    type="text"
+                                    placeholder="yyyy-mm-dd"/>
+                            <label for="toDate">to</label>
+                        </div>
+                        <div class="right-button">
+                            <input class="btn btn-default" value="Get" type="submit"/>
+                        </div>
+                    </form>
+                </div>
+
+                <table class="striped responsive-table" id="tableToBeUpdatedWithAjax">
+                    <thead>
+                    <tr>
+                        <th>Transaction type</th>
+                        <th>Currency</th>
+                        <th>Booking date</th>
+                        <th>Value date</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Paid</th>
+                        <th>Amount</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="transaction : ${apiResponse.transactions}">
+                        <td th:text="${transaction.typeDescription}"></td>
+                        <td th:text="${transaction.currency}"></td>
+                        <td th:text="${transaction.bookingDate}"></td>
+                        <td th:text="${transaction.valueDate}"></td>
+                        <td th:text="${transaction.narrative}"></td>
+                        <td th:text="${transaction.status}"></td>
+                        <td th:text="${transaction.paymentDate}"></td>
+                        <td th:text="${transaction.amount}"></td>
+
+                        <td>
+                            <div class="section" th:each="link : ${apiResponse.links}">
+                                <a th:href="${link.href}" th:text="${link.rel}"></a>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <button class="btn waves-effect waves-light blue" type="button" onclick="history.back()">Back</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:replace="header :: footer"></div>
+
+<script>
+    jQuery(document).ready(function ($) {
+        $("#filterTransactionsForm").submit(function (event) {
+            event.preventDefault();
+            searchViaAjax();
+
+        });
+    });
+
+    function searchViaAjax() {
+        var search = {}
+        search["fromDate"] = $("#fromDate").val();
+        search["toDate"] = $("#toDate").val();
+
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "filter",
+            data: JSON.stringify(search),
+            timeout: 100000,
+            success: function (data) {
+                $('#tableToBeUpdatedWithAjax').replaceWith($('#tableToBeUpdatedWithAjax', data));
+            },
+            error: function (e) {
+                console.log("ERROR: ", e);
+            },
+            done: function (e) {
+                console.log("DONE");
+            }
+        });
+    }
+</script>
+</body>
+</html>
+

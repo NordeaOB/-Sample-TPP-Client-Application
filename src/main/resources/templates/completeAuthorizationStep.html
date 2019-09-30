@@ -1,0 +1,150 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: head"></head>
+
+<body>
+
+<div th:replace="header :: header"></div>
+
+<div class="parallax-container">
+    <div class="row"><br>
+        <div class="col m8 s8 offset-m2 offset-s2 center">
+            <div class="transient-card">
+                <img src="/public/openbanking.png" alt="Openbanking" class="circle responsive-img">
+                <div class="row fancy-form">
+                    <div class="row">
+                    <h4>Authorize BVA&trade; application to access your accounts.</h4>
+                    <p class="left-align">In order for BVA to access your financial data you need to grant
+                        us access to your accounts. Following the link will take you to Nordea to authorize
+                        us to access your accounts.
+                    </p>
+                    </div>
+
+                    <form action="#" th:if="${completeAuthorization.country !='CORP'}" th:action="@{/authorize/completeAuthorization}" th:object="${completeAuthorization}"
+                          method="get">
+                        <div class="row">
+                            <div th:if="${completeAuthorization.country =='SE'}">
+                                <div class="input-field col s12 m6">
+                                    <input id="netbankID" type="text" name="netbankID"/>
+                                    <td th:if="${#fields.hasErrors('netbankID')}" th:errors="*{netbankID}">netbankID Error</td>
+                                    <label for="netbankID"> Enter NetbankID</label>
+                                </div>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="duration" type="text" name="duration" value="126"/>
+                                <label for="duration">Enter Duration of the Consent in Minutes</label>
+                                <td th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}">duration Error</td>
+                            </div>
+                        </div>
+                        <div>
+                            <div th:if="${completeAuthorization.country =='SE'}">
+                                <div class="input-field col s12">
+                                    <button
+                                            type="button"
+                                            class="btn btn-primary"
+                                            onclick="addElement('added_fields', 'div')"
+                                    >Add Account</button>
+                                </div>
+                                <div class="row">
+                                    <div id="added_fields"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row left-align">
+                            Select One or More Scopes<br>
+                            <div class="input-field col s12 m6">
+                                <label>
+                                    <input type="checkbox" name="scopes" value="ACCOUNTS_BASIC" checked/>
+                                    <span>ACCOUNTS_BASIC</span>
+                                </label>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <label>
+                                    <input type="checkbox" name="scopes" value="ACCOUNTS_BALANCES" checked/>
+                                    <span>ACCOUNTS_BALANCES</span>
+                                </label>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <label>
+                                    <input type="checkbox" name="scopes" value="ACCOUNTS_DETAILS" checked/>
+                                    <span>ACCOUNTS_DETAILS</span>
+                                </label>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <label>
+                                    <input type="checkbox" name="scopes" value="ACCOUNTS_TRANSACTIONS" checked/>
+                                    <span>ACCOUNTS_TRANSACTIONS</span>
+                                </label>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <label>
+                                    <input type="checkbox" name="scopes" value="PAYMENTS_MULTIPLE" checked/>
+                                    <span>PAYMENTS_MULTIPLE</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row button-row">
+                            <button class="btn waves-effect waves-light z-depth-3" type="submit">Start Authorization<i class="material-icons right">send</i></button>
+                        </div>
+                    </form>
+                    <form action="#" th:if="${completeAuthorization.country =='CORP'}"th:action="@{/authorize/completeAuthorization}" th:object="${completeAuthorization}" method="post">
+                        <div class="row">
+                            <div class="input-field col s12 m6">
+                                <input id="duration" type="text" name="duration" value="126"/>
+                                <label for="duration">Enter Duration of the Consent in Minutes</label>
+                                <td th:if="${#fields.hasErrors('duration')}" th:errors="*{duration}">duration Error</td>
+                            </div>
+                        </div>
+                        <div class="input-field col s12 m6">
+                            <input id="authorizerId"
+                                   type="text" class="tooltipped"
+                                   th:field="*{firstAuthorizer}" data-tooltip="You can overwrite the default with an alternate"/>
+                            <label for="authorizerId">Authorizer Id</label>
+                        </div>
+                            <div class="row left-align">
+                            Select One or More Scopes<br>
+                            <div class="input-field col s12 m6">
+                                <label>
+                                    <input type="checkbox" name="scopes" value="BROADBAND" checked/>
+                                    <span>ACCOUNTS_BROADBAND</span>
+                                </label>
+                            </div>
+
+                        </div>
+                        <div class="row button-row">
+                            <button class="btn waves-effect waves-light z-depth-3" type="submit">Start Authorization<i class="material-icons right">send</i></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var i = 0;
+    function addElement(parentId, elementTag) {
+        var id = "accountNumbers";
+        i++;
+        var html =
+            '<input id="' +
+            id +
+            i +
+            '" type="text" name="' +
+            id +
+            '"/><label for="' +
+            id +
+            i +
+            '"> Enter Account Number</label>';
+        var p = document.getElementById(parentId);
+
+        var newElement = document.createElement(elementTag);
+        newElement.className = "input-field col s12 m6";
+        newElement.innerHTML = html;
+        p.appendChild(newElement);
+    }
+</script>
+
+<div th:replace="header :: footer"></div>
+</body>
+</html>

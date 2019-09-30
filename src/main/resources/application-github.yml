@@ -1,0 +1,27 @@
+server:
+  port: 7000
+  servlet:
+    session:
+      cookie:
+        name: MYSESSIONID
+  tomcat:
+    remote_ip_header: x-forwarded-for
+    protocol_header: x-forwarded-proto
+    use-relative-redirects: true
+obi:
+  oauth.callback.url: https://localhost:7000/authorize/oauth/callback
+  proxy:
+    host: 192.168.1.1
+    port: 80
+  environments:
+    household:
+      portal-sandbox:
+        baseURL: https://api.nordeaopenbanking.com
+        clientId: overwrite
+        clientSecret: overwrite
+      production:
+        baseURL: https://api.nordea.com/nordea-open-banking/obi
+        clientId: overwrite
+        clientSecret: overwrite
+
+management.endpoints.web.exposure.include: health,info

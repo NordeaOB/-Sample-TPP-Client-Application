@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: head"></head>
+<body>
+
+<div th:replace="header :: header"></div>
+
+<div class="container">
+    <div class="section">
+        <div class="alert alert-danger">
+            Oops. Something went wrong.
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th>Exception</th>
+                    <th>Context</th>
+                    <th>Status</th>
+                    <th>Error</th>
+                    <th>Raw request</th>
+                    <th>Raw response</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${exception}"></td>
+                    <td th:text="${url}"></td>
+                    <td th:text="${response_status_code}"></td>
+                    <td>
+                        <div th:if="${response_status_code != 200}">
+                            <div th:if="${response != null}">
+                                <div th:if="${response.groupHeader != null}" class="section">
+                                    <label for="messId">Messageid</label>
+                                    <div id="messId" th:text="${response.groupHeader.messageIdentification}"/>
+                                    <label for="failures">Failures</label>
+                                    <div id="failures" th:each="failure : ${response.error.failures}" class="section">
+                                        <div class="row" th:text="${failure.code}"></div>
+                                        <div class="row" th:text="${failure.path}"></div>
+                                        <div class="row" th:text="${failure.description}"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td th:if="${response_status_code != 400}" th:text="${raw_request}"></td>
+                    <td th:if="${response_status_code != 400}" th:text="${response_string}"></td>
+
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div th:replace="header :: footer"></div>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="header :: head"></head>
+<body>
+
+<div th:replace="header :: header"></div>
+
+<div class="container">
+    <div class="row center">
+
+        <h3>Welcome to our Business Verification Application</h3>
+        <div class="row">
+            <div class="col s2"></div>
+            <div class="col s8 m6">
+                <div class="card">
+                    <div class="card-content black-text">
+                        <span class="card-title">Choose client type</span>
+                        <p>Nordea BVA&trade; provide you with an easy to use application that use a secure way to handle
+                            Nordea bank accounts in multiple countries.</p>
+                        <div class="input-field">
+                            <select name="clientType" id="clientType">
+                                <option value="household">Household</option>
+                                <option value="corporate">Corporate</option>
+                            </select>
+                            <label for="clientType">What type of client are you?</label>
+                        </div>
+                    </div>
+                    <div class="card-action">
+                        <a id="authorization-link" class="btn-small tooltipped" role="button"
+                           data-tooltip="Start a country specific authentication and authorization of the Application">
+                            Continue
+                            <i class="material-icons right">send</i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col s2"></div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="header :: footer"></div>
+<script>
+    var startAuthorizationHref = "/authorize/startAuthorization/";
+    var clientTypeSelect = document.getElementById("clientType");
+    var authorizationLink = document.getElementById('authorization-link');
+    var defaultClientType = clientTypeSelect.options[0].value;
+    authorizationLink.href = startAuthorizationHref + defaultClientType;
+
+    clientTypeSelect.addEventListener("change", function (event) {
+        var chosenOption = event.target.selectedOptions[0].value;
+        var newAuthorizationLink = startAuthorizationHref + chosenOption;
+        authorizationLink.href = newAuthorizationLink;
+    });
+
+</script>
+
+</body>
+</html>

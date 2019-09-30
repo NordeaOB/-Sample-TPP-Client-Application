@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+>
+
+<head th:replace="header :: head"></head>
+<body>
+
+<div th:replace="header :: header"></div>
+
+
+<div class="container">
+    <div class="section">
+
+        <div class="row center">
+            <div class="col s12">
+                <div class="icon-block">
+                    <h2>Dynamic Sandbox functionalities</h2>
+                    <p>Create and delete accounts, create transactions on your own created accounts</p>
+                    <p>
+                        <a class="btn btn-primary btn-lg tooltipped" href="/dynamic/sbx/accounts/viewCreateAccount" role="button"
+                          data-tooltip="Create a specific account">Create account<i class="material-icons right">create</i></a>
+                        <a class="btn btn-lg tooltipped" href="/dynamic/sbx/accounts/viewDeleteAccount" role="button"
+                           data-tooltip="Delete a specific account">Delete account<i class="material-icons right">delete</i></a>
+                        <a class="btn btn-lg tooltipped" href="/dynamic/sbx/accounts/viewCreateTransaction" role="button"
+                           data-tooltip="Create transaction for a specific account">Create transaction<i class="material-icons right">create</i></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <br><br>
+</div>
+
+<div th:replace="header :: footer"></div>
+
+</body>
+</html>

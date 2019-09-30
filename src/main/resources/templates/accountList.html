@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: head"></head>
+<body>
+
+<div th:replace="header :: header"></div>
+
+<div class="parallax-container">
+    <div class="row">
+        <div class="col m8 s8 offset-m2 offset-s2 center">
+            <div class="transient-card">
+                <h4>Your accounts</h4>
+                <table class="striped">
+                    <thead>
+                    <tr>
+                        <th>Account-ID</th>
+                        <th>Numbers</th>
+                        <th>Account name</th>
+                        <th>Available balance</th>
+                        <th>Booked balance</th>
+                        <th>Currency</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="account : ${apiResponse.accounts}">
+                        <td th:text="${account.id}"></td>
+                        <td>
+                            <div th:each="numbers : ${account.accountNumbers}">
+                                <div class="section" th:text="${numbers.type}"></div>
+                                <div class="section" th:text="${numbers.value}"></div>
+                            </div>
+                        </td>
+                        <td th:text="${account.accountName}"></td>
+                        <td th:text="${account.availableBalance}"></td>
+                        <td th:text="${account.bookedBalance}"></td>
+
+                        <td th:text="${account.currency}"></td>
+                        <td th:text="${account.status}"></td>
+                        <td>
+                            <div class="section" th:each="link : ${account.links}">
+                                <a th:href="${link.href}" th:text="${link.rel}" role="button" class="btn btn-small"/>
+                            </div>
+                            <div th:if="${deleteAction}">
+                                <a th:href="@{/dynamic/sbx/accounts/delete/{id}(id=${account.getId()})}" th:text="delete" role="button" class="btn btn-small"/>
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="header :: footer"></div>
+</body>
+</html>
+

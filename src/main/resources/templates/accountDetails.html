@@ -1,0 +1,53 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="header :: head"></head>
+<body>
+
+<div th:replace="header :: header"></div>
+
+<div class="parallax-container">
+    <div class="row">
+        <div class="col m8 s8 offset-m2 offset-s2 center">
+            <div class="transient-card">
+                <h4>Account Details</h4>
+                <table class="striped">
+                    <thead>
+                    <tr>
+                        <th>Account-ID</th>
+                        <th>Account numbers</th>
+                        <th>Account name</th>
+                        <th>Type</th>
+                        <th>Bank</th>
+                        <th>Available balance</th>
+                        <th>Booked balance</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="${apiResponse.id}"></td>
+                        <td>
+                            <div th:each="numbers : ${apiResponse.accountNumbers}">
+                                <div class="section" th:text="${numbers.type}"></div>
+                                <div class="section" th:text="${numbers.value}"></div>
+                            </div>
+                        </td>
+                        <td th:text="${apiResponse.accountName}"></td>
+                        <td th:text="${apiResponse.accountType}"></td>
+                        <td th:text="${apiResponse.bank}"></td>
+                        <td th:text="${apiResponse.availableBalance}"></td>
+                        <td th:text="${apiResponse.bookedBalance}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="row">
+                    <button class="btn waves-effect waves-light" type="button" onclick="history.back()">Back</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:replace="header :: footer"></div>
+</body>
+</html>
+

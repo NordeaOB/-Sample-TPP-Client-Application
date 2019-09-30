@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="header :: head"><title>bva</title></head>
+<body>
+<div th:replace="header :: header"></div>
+
+<div class="parallax-container">
+    <div class="row"><br>
+        <div class="col m8 s8 offset-m2 offset-s2 center">
+            <div class="transient-card">
+                <img src="/public/openbanking.png" alt="Openbanking" class="circle responsive-img">
+                <div class="row fancy-form">
+                    <h4>Update Environment Settings</h4>
+                    <form action="#" th:action="@{/authorize/startAuthorization}" th:object="${startAuthorization}" th:method="post" class="col s12">
+                        <div style="display: none">
+                            <input id="clientType"
+                                   type="text" class="tooltipped"
+                                   th:field="*{clientType}" data-tooltip="You can overwrite the default with an alternate url"/>
+                            <label for="clientType">Type</label>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m6">
+                                <select id="environment"
+                                        th:field="*{environment}">
+                                    <option th:each="envOption : ${environments}"
+                                            th:value="${envOption}"
+                                            th:utext="${envOption}"></option>
+                                </select>
+                                <label for="environment">Environment</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m6" th:if="${startAuthorization.clientType != 'corporate'}">
+                                <select name="country" placeholder="country" id="country" class="form-control country">
+                                    <option value="FI">Finland</option>
+                                    <option value="SE">Sweden</option>
+                                    <option value="DK">Denmark</option>
+                                    <option value="NO">Norway</option>
+                                </select>
+                                <label for="environment">Country</label>
+                            </div>
+                            <div class="input-field col s12 m6">
+
+                                <select name="apiVersion" id="apiVersion" class="form-control">
+                                    <option value="v1" th:selected="${startAuthorization.clientType == 'corporate'}">v1</option>
+                                    <option value="v2" th:if="${startAuthorization.clientType != 'corporate'}">v2</option>
+                                    <option value="v3" th:selected="${startAuthorization.clientType != 'corporate'}">v3</option>
+                                    <option value="v4" th:if="${startAuthorization.clientType != 'corporate'}">v4</option>
+                                </select>
+                                <label for="environment">API Version</label>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="clientId"
+                                       type="text" class="tooltipped"
+                                       th:field="*{clientId}"
+                                       data-tooltip="You can overwrite the default with an alternate clientId"/>
+                                <label for="clientId">Client Id</label>
+                            </div>
+                            <div class="input-field col s12 m6">
+                                <input id="clientSecret"
+                                       type="password" class="tooltipped"
+                                       th:field="*{clientSecret}"
+                                       data-tooltip="You can overwrite the default with an alternate client secret"/>
+                                <label for="clientSecret">Client Secret</label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-field col s12 m6">
+                                <label style="font-size: 1em">
+                                    <input type="checkbox" name="eidas" value="enable" class="tooltipped"
+                                           data-tooltip="eidas is a two way TLS trust">
+                                    <span class="cr"><i class="cr-icon fa fa-check"></i></span>
+                                    Enable eIDAS Authentication
+                                </label>
+                            </div>
+                            <div class="input-field col s12 m6" th:if="${startAuthorization.clientType != 'corporate'}">
+                                <input id="baseUrl"
+                                       type="text" class="tooltipped"
+                                       th:field="*{baseUrl}" data-tooltip="You can overwrite the default with an alternate url"/>
+                                <label for="baseUrl">Base Url</label>
+                            </div>
+                        </div>
+                        <div class="row button-row">
+                            <button type="submit" class="btn waves-effect waves-light z-depth-3">Continue<i class="material-icons right">send</i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="header :: footer"></div>
+
+</body>
+</html>
+
