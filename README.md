@@ -1,5 +1,5 @@
 # Sample TPP Client Application
-This is the Java centric "Web wallet" application that will thrive with ["Dogfooding"](https://en.wikipedia.org/wiki/Eating_your_own_dog_food)
+This is the Java centric "TPP client" application that will thrive with ["Dogfooding"](https://en.wikipedia.org/wiki/Eating_your_own_dog_food)
 
 ### Building local, Nordea premises:
 
