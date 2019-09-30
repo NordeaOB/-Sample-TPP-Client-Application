@@ -1,0 +1,25 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/2.1.3">
+    <id>dist</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <files>
+        <file>
+            <source>manifest.json</source>
+            <outputDirectory></outputDirectory>
+        </file>
+    </files>
+    <fileSets>
+        <fileSet>
+            <directory>${project.build.directory}</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>obi-api-client-1.3.0.jar</include>
+            </includes>
+            <excludes>
+                <exclude>*.zip</exclude>
+            </excludes>
+        </fileSet>
+    </fileSets>
+</assembly>

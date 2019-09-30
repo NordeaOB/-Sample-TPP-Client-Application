@@ -1,0 +1,65 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Open Banking API",
+    "version": "3.0",
+    "title": "Nordea Open Banking API",
+    "contact": {
+      "name": "Open Banking team",
+      "url": "https://nordeaopenbanking.com",
+      "email": "support@nordeaopenbanking.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "x-ibm-name": "pis-v3-fee",
+    "x-version": "3.0"
+  },
+  "host": "localhost:0",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "ClientId": {
+      "type": "apiKey",
+      "name": "X-IBM-Client-Id",
+      "in": "header"
+    },
+    "ClientSecret": {
+      "type": "apiKey",
+      "name": "X-IBM-Client-Secret",
+      "in": "header"
+    },
+    "DecoupledAuth": {
+      "type": "oauth2",
+      "authorizationUrl": "/v3/authorize-decoupled",
+      "tokenUrl": "/v3/authorize-decoupled/token",
+      "flow": "accessCode",
+      "scopes": {
+        "ACCOUNTS_BASIC": "Account information",
+        "ACCOUNTS_BALANCES": "Account information with balances",
+        "ACCOUNTS_DETAILS": "Account information with details",
+        "ACCOUNTS_TRANSACTIONS": "Account's transactions",
+        "PAYMENTS_MULTIPLE": "Payments Multiple"
+      },
+      "x-authSubType": "decoupled-auth",
+      "x-codeStatusDescription": "Returns code when authorization second step is finished",
+      "x-codeStatusUrl": "/v3/authorize-decoupled"
+    },
+    "OAuth2": {
+      "type": "oauth2",
+      "authorizationUrl": "/v3/authorize",
+      "tokenUrl": "/v3/authorize/token",
+      "flow": "accessCode",
+      "scopes": {
+        "ACCOUNTS_BASIC": "Account information",
+        "ACCOUNTS_BALANCES": "Account information with balances",
+        "ACCOUNTS_DETAILS": "Account information with details",
+        "ACCOUNTS_TRANSACTIONS": "Account's transactions",
+        "PAYMENTS_MULTIPLE": "Payments Multiple"
+      }
+    }
+  }
+}

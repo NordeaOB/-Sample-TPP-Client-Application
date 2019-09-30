@@ -1,0 +1,695 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Nordea Card Information Services API v1",
+    "version": "3.0",
+    "title": "Cards API",
+    "contact": {
+      "name": "Open Banking team",
+      "url": "https://nordeaopenbanking.com",
+      "email": "support@nordeaopenbanking.com"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "x-ibm-name": "cards-v1",
+    "x-version": "3.0"
+  },
+  "host": "localhost:0",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "cards-v1",
+      "description": "Credit Cards"
+    }
+  ],
+  "schemes": [
+    "http"
+  ],
+  "paths": {
+    "/v1/cards": {
+      "get": {
+        "tags": [
+          "cards-v1"
+        ],
+        "summary": "List credit cards",
+        "operationId": "getCreditCardsUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Date",
+            "in": "header",
+            "description": "Standard http header element for date and time. HTTP headers are represented as RFC 7231 Full Dates. example date: Wed, 24 Apr 2019 14:00:37 EEST",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Signature",
+            "in": "header",
+            "description": "A signature of request by the TPP on application level. The process of signing a request is described in 'Signing HTTP Messages' RFC draft version 10 (https://tools.ietf.org/html/draft-cavage-http-signatures-10). The request signature needs to be sent in the 'Signature' HTTP header as described in the RFC. Additional requirements from Nordea \n - The only allowed algorithm is RSA-SHA256 \n- The key size for the used RSA key pair has to be at least 2048 bit \n- The keyId is the clientId of your application originating from the Nordea Developer Portal \n- We require the following headers to be used in the signature \n* GET request: (request-target) host date \n* PUT and POST request: (request-target) host date content-type digest . \n* The request-target is a combination of the HTTP action verb and the request URI path.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "X-IBM-Client-Id",
+            "in": "header",
+            "description": "Id of the Client",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "X-IBM-Client-Secret",
+            "in": "header",
+            "description": "Secret password generated for the Client",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "X-Nordea-Originating-User-Agent",
+            "in": "header",
+            "description": "End user (i.e. PSU) agent information, to be provided if TPP is in session with the PSU",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "X-Nordea-Originating-User-Ip",
+            "in": "header",
+            "description": "End user (i.e. PSU) IP address, to be provided if TPP is in session with the PSU",
+            "required": false,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of credit cards",
+            "schema": {
+              "$ref": "#/definitions/CardListResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized with failure code:\n* error.apikey.missing = Missing API key. This operation requires API key, but it was missing.\n* error.token = Unspecified error with supplied token.\n* error.token.invalid = Missing access token or token did not authorized requested operation. This operation requires valid access token, but it was missing.\n* error.token.expired = Access token has expired.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Login failure",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Resource not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "CARDS_BASIC"
+            ],
+            "DecoupledAuth": [
+              "CARDS_BASIC"
+            ]
+          }
+        ],
+        "deprecated": false,
+        "x-availabilityStatus": "Stable"
+      }
+    },
+    "/v1/cards/{card_id}": {
+      "get": {
+        "tags": [
+          "cards-v1"
+        ],
+        "summary": "Get card details",
+        "operationId": "getCreditCardDetailsUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Date",
+            "in": "header",
+            "description": "Standard http header element for date and time. HTTP headers are represented as RFC 7231 Full Dates. example date: Wed, 24 Apr 2019 14:00:37 EEST",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Signature",
+            "in": "header",
+            "description": "A signature of request by the TPP on application level. The process of signing a request is described in 'Signing HTTP Messages' RFC draft version 10 (https://tools.ietf.org/html/draft-cavage-http-signatures-10). The request signature needs to be sent in the 'Signature' HTTP header as described in the RFC. Additional requirements from Nordea \n - The only allowed algorithm is RSA-SHA256 \n- The key size for the used RSA key pair has to be at least 2048 bit \n- The keyId is the clientId of your application originating from the Nordea Developer Portal \n- We require the following headers to be used in the signature \n* GET request: (request-target) host date \n* PUT and POST request: (request-target) host date content-type digest . \n* The request-target is a combination of the HTTP action verb and the request URI path.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "X-IBM-Client-Id",
+            "in": "header",
+            "description": "Id of the Client",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "X-IBM-Client-Secret",
+            "in": "header",
+            "description": "Secret password generated for the Client",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "X-Nordea-Originating-User-Agent",
+            "in": "header",
+            "description": "End user (i.e. PSU) agent information, to be provided if TPP is in session with the PSU",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "X-Nordea-Originating-User-Ip",
+            "in": "header",
+            "description": "End user (i.e. PSU) IP address, to be provided if TPP is in session with the PSU",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "card_id",
+            "in": "path",
+            "description": "Credit card ID ",
+            "required": true,
+            "type": "string",
+            "x-availabilityStatus": "Stable"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Credit card",
+            "schema": {
+              "$ref": "#/definitions/CardDetailsResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized with failure code:\n* error.apikey.missing = Missing API key. This operation requires API key, but it was missing.\n* error.token = Unspecified error with supplied token.\n* error.token.invalid = Missing access token or token did not authorized requested operation. This operation requires valid access token, but it was missing.\n* error.token.expired = Access token has expired.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Login failure",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Credit card not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "CARDS_DETAILS"
+            ],
+            "DecoupledAuth": [
+              "CARDS_DETAILS"
+            ]
+          }
+        ],
+        "deprecated": false,
+        "x-availabilityStatus": "Stable"
+      }
+    },
+    "/v1/cards/{card_id}/transactions": {
+      "get": {
+        "tags": [
+          "cards-v1"
+        ],
+        "summary": "List card transactions",
+        "operationId": "getCreditCardTransactionsUsingGET",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "Date",
+            "in": "header",
+            "description": "Standard http header element for date and time. HTTP headers are represented as RFC 7231 Full Dates. example date: Wed, 24 Apr 2019 14:00:37 EEST",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "Signature",
+            "in": "header",
+            "description": "A signature of request by the TPP on application level. The process of signing a request is described in 'Signing HTTP Messages' RFC draft version 10 (https://tools.ietf.org/html/draft-cavage-http-signatures-10). The request signature needs to be sent in the 'Signature' HTTP header as described in the RFC. Additional requirements from Nordea \n - The only allowed algorithm is RSA-SHA256 \n- The key size for the used RSA key pair has to be at least 2048 bit \n- The keyId is the clientId of your application originating from the Nordea Developer Portal \n- We require the following headers to be used in the signature \n* GET request: (request-target) host date \n* PUT and POST request: (request-target) host date content-type digest . \n* The request-target is a combination of the HTTP action verb and the request URI path.",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "X-IBM-Client-Id",
+            "in": "header",
+            "description": "Id of the Client",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "X-IBM-Client-Secret",
+            "in": "header",
+            "description": "Secret password generated for the Client",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "X-Nordea-Originating-User-Agent",
+            "in": "header",
+            "description": "End user (i.e. PSU) agent information, to be provided if TPP is in session with the PSU",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "X-Nordea-Originating-User-Ip",
+            "in": "header",
+            "description": "End user (i.e. PSU) IP address, to be provided if TPP is in session with the PSU",
+            "required": false,
+            "type": "string"
+          },
+          {
+            "name": "card_id",
+            "in": "path",
+            "description": "Credit card ID ",
+            "required": true,
+            "type": "string",
+            "x-availabilityStatus": "Stable"
+          },
+          {
+            "name": "continuation_key",
+            "in": "query",
+            "description": "Resource listing may return a continuationKey if there's more results available. Request may be retried with the continuationKey, but otherwise same parameters, in order to get more results.",
+            "required": false,
+            "type": "string",
+            "x-availabilityStatus": "Stable"
+          },
+          {
+            "name": "from_date",
+            "in": "query",
+            "description": "Start date for transaction filtering",
+            "required": false,
+            "type": "string",
+            "format": "date",
+            "x-availabilityStatus": "Stable"
+          },
+          {
+            "name": "to_date",
+            "in": "query",
+            "description": "End date for transaction filtering",
+            "required": false,
+            "type": "string",
+            "format": "date",
+            "x-availabilityStatus": "Stable"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of credit card transactions",
+            "schema": {
+              "$ref": "#/definitions/CardTransactionListResponse"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "401": {
+            "description": "Unauthorized with failure code:\n* error.apikey.missing = Missing API key. This operation requires API key, but it was missing.\n* error.token = Unspecified error with supplied token.\n* error.token.invalid = Missing access token or token did not authorized requested operation. This operation requires valid access token, but it was missing.\n* error.token.expired = Access token has expired.",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "403": {
+            "description": "Login failure",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          },
+          "404": {
+            "description": "Credit card not found",
+            "schema": {
+              "$ref": "#/definitions/ErrorResponse"
+            }
+          }
+        },
+        "security": [
+          {
+            "OAuth2": [
+              "CARDS_TRANSACTIONS"
+            ],
+            "DecoupledAuth": [
+              "CARDS_TRANSACTIONS"
+            ]
+          }
+        ],
+        "deprecated": false,
+        "x-availabilityStatus": "Stable"
+      }
+    }
+  },
+  "securityDefinitions": {
+    "ClientId": {
+      "type": "apiKey",
+      "name": "X-IBM-Client-Id",
+      "in": "header"
+    },
+    "ClientSecret": {
+      "type": "apiKey",
+      "name": "X-IBM-Client-Secret",
+      "in": "header"
+    },
+    "DecoupledAuth": {
+      "type": "oauth2",
+      "authorizationUrl": "/v3/authorize-decoupled",
+      "tokenUrl": "/v3/authorize-decoupled/token",
+      "flow": "accessCode",
+      "scopes": {
+        "CARDS_BASIC": "Credit card information",
+        "CARDS_DETAILS": "Detailed credit card information",
+        "CARDS_TRANSACTIONS": "Credit card transactions"
+      },
+      "x-authSubType": "decoupled-auth",
+      "x-codeStatusDescription": "Returns code when authorization second step is finished",
+      "x-codeStatusUrl": "/v3/authorize-decoupled"
+    },
+    "OAuth2": {
+      "type": "oauth2",
+      "authorizationUrl": "/v3/authorize",
+      "tokenUrl": "/v3/authorize/token",
+      "flow": "accessCode",
+      "scopes": {
+        "CARDS_BASIC": "Credit card information",
+        "CARDS_DETAILS": "Detailed credit card information",
+        "CARDS_TRANSACTIONS": "Credit card transactions"
+      }
+    }
+  },
+  "definitions": {
+    "CardDetailsResponse": {
+      "type": "object",
+      "properties": {
+        "group_header": {
+          "description": "Standard format response header",
+          "$ref": "#/definitions/ResponseHeader",
+          "x-availabilityStatus": "Stable"
+        },
+        "response": {
+          "description": "Payload",
+          "$ref": "#/definitions/CreditCard",
+          "x-availabilityStatus": "Stable"
+        }
+      },
+      "title": "CardDetailsResponse",
+      "description": "Single credit card response"
+    },
+    "CardListResponse": {
+      "type": "object",
+      "properties": {
+        "group_header": {
+          "description": "Standard format response header",
+          "$ref": "#/definitions/ResponseHeader",
+          "x-availabilityStatus": "Stable"
+        },
+        "response": {
+          "description": "Payload",
+          "$ref": "#/definitions/CreditCardList",
+          "x-availabilityStatus": "Stable"
+        }
+      },
+      "title": "CardListResponse",
+      "description": "List of credit cards response"
+    },
+    "CardTransactionListResponse": {
+      "type": "object",
+      "properties": {
+        "group_header": {
+          "description": "Standard format response header",
+          "$ref": "#/definitions/ResponseHeader",
+          "x-availabilityStatus": "Stable"
+        },
+        "response": {
+          "description": "Payload",
+          "$ref": "#/definitions/CreditCardTransactionList",
+          "x-availabilityStatus": "Stable"
+        }
+      },
+      "title": "CardTransactionListResponse",
+      "description": "List of credit card transactions response"
+    },
+    "CreditCard": {
+      "type": "object",
+      "properties": {
+        "credit_available_balance": {
+          "type": "number",
+          "description": "Available balance on the credit card",
+          "x-availabilityStatus": "Stable"
+        },
+        "credit_booked_balance": {
+          "type": "number",
+          "description": "Booked balance on the credit card",
+          "x-availabilityStatus": "Stable"
+        },
+        "credit_limit": {
+          "type": "number",
+          "description": "Credit limit of the credit card",
+          "x-availabilityStatus": "Stable"
+        },
+        "id": {
+          "type": "string",
+          "description": "Credit card ID",
+          "x-availabilityStatus": "Stable"
+        },
+        "masked_credit_card_number": {
+          "type": "string",
+          "description": "Masked credit card number",
+          "x-availabilityStatus": "Stable"
+        },
+        "parallel_cards": {
+          "type": "array",
+          "description": "List of parallel cards belonging to this principal card",
+          "items": {
+            "$ref": "#/definitions/CreditCard"
+          },
+          "x-availabilityStatus": "Stable"
+        },
+        "product_id": {
+          "type": "string",
+          "description": "Credit card product ID",
+          "x-availabilityStatus": "Stable"
+        },
+        "product_name": {
+          "type": "string",
+          "description": "Localized credit card product name",
+          "x-availabilityStatus": "Stable"
+        }
+      },
+      "title": "CreditCard",
+      "description": "Credit card"
+    },
+    "CreditCardList": {
+      "type": "object",
+      "properties": {
+        "cards": {
+          "type": "array",
+          "description": "List of credit cards",
+          "items": {
+            "$ref": "#/definitions/CreditCard"
+          },
+          "x-availabilityStatus": "Stable"
+        }
+      },
+      "title": "CreditCardList",
+      "description": "List of credit cards"
+    },
+    "CreditCardTransaction": {
+      "type": "object",
+      "properties": {
+        "amount": {
+          "type": "number",
+          "description": "Monetary amount of the credit card transaction in the cards currency",
+          "x-availabilityStatus": "Stable"
+        },
+        "beneficiary": {
+          "type": "string",
+          "description": "Beneficiary of the credit card transaction",
+          "x-availabilityStatus": "Stable"
+        },
+        "entry_date": {
+          "type": "string",
+          "format": "date",
+          "description": "Date when the transaction took place",
+          "x-availabilityStatus": "Stable"
+        },
+        "id": {
+          "type": "string",
+          "description": "Credit card transaction ID",
+          "x-availabilityStatus": "Stable"
+        },
+        "masked_credit_card_number": {
+          "type": "string",
+          "description": "Masked credit card number",
+          "x-availabilityStatus": "Stable"
+        }
+      },
+      "title": "CreditCardTransaction",
+      "description": "Single credit card transaction"
+    },
+    "CreditCardTransactionList": {
+      "type": "object",
+      "properties": {
+        "transactions": {
+          "type": "array",
+          "description": "List of credit card transactions",
+          "items": {
+            "$ref": "#/definitions/CreditCardTransaction"
+          },
+          "x-availabilityStatus": "Stable"
+        }
+      },
+      "title": "CreditCardTransactionList",
+      "description": "List of credit card transactions"
+    },
+    "ErrorPayload": {
+      "type": "object",
+      "properties": {
+        "request": {
+          "description": "Error details",
+          "$ref": "#/definitions/RequestEcho",
+          "x-availabilityStatus": "Stable"
+        },
+        "failures": {
+          "type": "array",
+          "description": "More details on the occurred error",
+          "items": {
+            "$ref": "#/definitions/Failure"
+          },
+          "x-availabilityStatus": "Stable"
+        }
+      },
+      "title": "ErrorPayload",
+      "description": "Error response body"
+    },
+    "ErrorResponse": {
+      "type": "object",
+      "properties": {
+        "group_header": {
+          "description": "Standard format response header",
+          "$ref": "#/definitions/ResponseHeader",
+          "x-availabilityStatus": "Stable"
+        },
+        "error": {
+          "description": "Payload",
+          "$ref": "#/definitions/ErrorPayload",
+          "x-availabilityStatus": "Stable"
+        }
+      },
+      "title": "ErrorResponse",
+      "description": "Error response"
+    },
+    "Failure": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "Failure code",
+          "x-availabilityStatus": "Stable"
+        },
+        "description": {
+          "type": "string",
+          "description": "Failure description",
+          "x-availabilityStatus": "Stable"
+        },
+        "path": {
+          "type": "string",
+          "description": "JSON path of the failing element if applicable",
+          "x-availabilityStatus": "Stable"
+        },
+        "type": {
+          "type": "string",
+          "description": "Type of the validation error, e.g. NotNull",
+          "x-availabilityStatus": "Stable"
+        }
+      },
+      "title": "Failure",
+      "description": "Validation error"
+    },
+    "Pagination": {
+      "type": "object",
+      "properties": {
+        "continuation_key": {
+          "type": "string",
+          "description": "Resource listing may return a continuationKey if there's more results available. Request may be retried with the continuationKey, but otherwise same parameters, in order to get more results.",
+          "x-availabilityStatus": "Stable"
+        }
+      },
+      "title": "Pagination",
+      "description": "Details of paginated response"
+    },
+    "RequestEcho": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "type": "string",
+          "description": "Original request url",
+          "x-availabilityStatus": "Stable"
+        }
+      },
+      "title": "RequestEcho",
+      "description": "Original request information"
+    },
+    "ResponseHeader": {
+      "type": "object",
+      "properties": {
+        "creation_date_time": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Response creation time",
+          "x-availabilityStatus": "Stable"
+        },
+        "http_code": {
+          "type": "integer",
+          "format": "int32",
+          "example": 200,
+          "description": "HTTP code for response",
+          "x-availabilityStatus": "Stable"
+        },
+        "message_identification": {
+          "type": "string",
+          "description": "Original request id for correlation purposes",
+          "x-availabilityStatus": "Stable"
+        },
+        "message_pagination": {
+          "description": "Details of paginated response",
+          "$ref": "#/definitions/Pagination",
+          "x-availabilityStatus": "Stable"
+        }
+      },
+      "title": "ResponseHeader",
+      "description": "External response header"
+    }
+  }
+}
