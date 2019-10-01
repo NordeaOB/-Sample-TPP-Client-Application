@@ -6,7 +6,7 @@ This is the Java centric "TPP client" application that will thrive with ["Dogfoo
 ```mvn clean install``` 
 
 ## Running local, Github build:
-```mvn spring-boot:run -Drun.profiles=github -fpom-github.xml```
+```mvn spring-boot:run -Drun.profiles=github -fpom.xml```
 
 or
 
