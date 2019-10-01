@@ -1,25 +1,14 @@
 # Sample TPP Client Application
 This is the Java centric "TPP client" application that will thrive with ["Dogfooding"](https://en.wikipedia.org/wiki/Eating_your_own_dog_food)
 
-### Building local, Nordea premises:
+### Building local:
 
 ```mvn clean install``` 
 
-### Github build
-```mvn clean install -fpom-github.xml```
-
-
-## Running local, Nordea premises:
-```mvn spring-boot:run -Drun.profiles=local```
 ## Running local, Github build:
 ```mvn spring-boot:run -Drun.profiles=github -fpom-github.xml```
 
 or
-
-```java -jar target/obi-api-client-{version}.jar```
-
-The github copy
-
 
 ```java -jar -Dspring.profiles.active=github target/obi-api-client-{version}.jar```
 
