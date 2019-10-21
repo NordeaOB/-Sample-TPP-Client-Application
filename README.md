@@ -33,7 +33,3 @@ Your application hosting need to support SSL handshaking security
 ## Disclaimer OAUTH 
 When the OAuth authentication process returns to a localhost, a secured endpoint(https) is assumed.
 You can just remove the 's' in the return url and proceed with the given 'code' 
-
-## Nordea > Github
-A zip file for github is constructed in /target/obi-webwallet-{version}-github-distribution.zip
-it contains all the src code.
