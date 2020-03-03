@@ -6,9 +6,6 @@ import lombok.Data;
 @Data
 public class ExternalRequestEchoV2 {
 
-    @JsonProperty("_type")
-    private ExternalErrorResponse.TypeEnum type;
-
     @JsonProperty("messageIdentifier")
     private String messageIdentifier;
 
