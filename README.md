@@ -1,5 +1,6 @@
 # Sample TPP Client Application
-This is the Java centric "TPP client" application that will thrive with ["Dogfooding"](https://en.wikipedia.org/wiki/Eating_your_own_dog_food)
+This is a Java centric sample "TPP client" application that will enable communication to the open API of Nordea Openbanking.
+You will need to signup and create an application in order for making requests, as you need a clientid and a secret
 
 ### Building local:
 
