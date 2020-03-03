@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data
-@AllArgsConstructor
 public class ExternalFailure {
 
     @JsonProperty("code")
@@ -17,6 +16,4 @@ public class ExternalFailure {
     @JsonProperty("path")
     private String path;
 
-    @JsonProperty("type")
-    private String type;
 }
