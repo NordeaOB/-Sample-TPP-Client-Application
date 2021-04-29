@@ -17,7 +17,7 @@
         <java.version>1.8</java.version>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
-        <version.openapi.codegen>3.3.3</version.openapi.codegen>
+        <version.openapi.codegen>5.1.0</version.openapi.codegen>
         <spring-cloud.version>Greenwich.SR1</spring-cloud.version>
         <api-docs.json.filename>src/build-resources/api-docs</api-docs.json.filename>
         <generated-sources-path>${project.build.directory}/generated-sources</generated-sources-path>
